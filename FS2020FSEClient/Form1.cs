@@ -123,7 +123,9 @@ namespace FS2020FSEClient {
                 regex = new Regex(@"(?<=<fuel>).*(?=</fuel>)");
                 float fuelTotalGal = Array.ConvertAll(regex.Match(response.Content).Value.Split(' '), s => float.TryParse(s, out var i) ? i : 0).Sum();
                 float fuelLeftLb = fuelTotalGal * 5.926f;
+                float fuelForEach = fuelLeftLb / AircraftStats.allAircraft[ac].fuelTanks.Length;
                 foreach (fuelTank f in AircraftStats.allAircraft[ac].fuelTanks) {
+                    /*
                     float fuelToPut = 0.0f;
                     if (fuelLeftLb > (f.maxFuel * 5.926f)) {
                         fuelToPut = f.maxFuel * 5.926f;
@@ -132,7 +134,8 @@ namespace FS2020FSEClient {
                         fuelToPut = fuelLeftLb;
                         fuelLeftLb = 0.0f;
                     }
-                    m.WriteFloat(m.addressFromOffsetList(offsetDict["Fuel Tanks"].getOffsetAtArrayIndex(f.tankArrayIndex), (UInt64)gameProcess.MainModule.BaseAddress), fuelToPut);
+                    */
+                    m.WriteFloat(m.addressFromOffsetList(offsetDict["Fuel Tanks"].getOffsetAtArrayIndex(f.tankArrayIndex), (UInt64)gameProcess.MainModule.BaseAddress), fuelForEach);
                 }
                 float payloadPerPayloadArea = totalPayload / AircraftStats.allAircraft[ac].payloadArrayLength;
                 for (uint i = 0; i < AircraftStats.allAircraft[ac].payloadArrayLength; i++) {
